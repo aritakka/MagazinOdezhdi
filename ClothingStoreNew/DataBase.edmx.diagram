@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="59764a1e24f3444ba80076b460d631d9" Name="Diagram1">
+        <EntityTypeShape EntityType="ClothingStoreEntities.C__EFMigrationsHistory" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.Brands" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.CartItems" Width="1.5" PointX="5.25" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.Categories" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.OrderItems" Width="1.5" PointX="5.25" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.Orders" Width="1.5" PointX="3" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.Products" Width="1.5" PointX="3" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.Reviews" Width="1.5" PointX="5.25" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ClothingStoreEntities.Users" Width="1.5" PointX="0.75" PointY="8.375" IsExpanded="true" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_Products_Brands_BrandId" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_CartItems_Products_ProductId" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_Products_Categories_CategoryId" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_OrderItems_Orders_OrderId" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_OrderItems_Products_ProductId" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_Orders_Users_UserId" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_Reviews_Products_ProductId" ManuallyRouted="false" />
+        <AssociationConnector Association="ClothingStoreEntities.FK_Reviews_Users_UserId" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
