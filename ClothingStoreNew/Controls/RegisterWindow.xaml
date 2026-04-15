@@ -4,12 +4,17 @@
         Title="Регистрация" Height="300" Width="300">
 
     <StackPanel Margin="20">
+
         <TextBlock Text="Email:"/>
         <TextBox x:Name="EmailBox" Margin="5"/>
+
         <TextBlock Text="ФИО:"/>
         <TextBox x:Name="NameBox" Margin="5"/>
+
         <TextBlock Text="Пароль:"/>
         <PasswordBox x:Name="PasswordBox" Margin="5"/>
+
         <Button Content="Зарегистрироваться" Click="Register_Click" Margin="5"/>
+
     </StackPanel>
 </Window>

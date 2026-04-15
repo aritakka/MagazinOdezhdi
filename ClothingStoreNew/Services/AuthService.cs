@@ -8,7 +8,9 @@ namespace ClothingStoreNew.Services
 
         public Users Login(string email, string password)
         {
-            return _db.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+            return _db.Users.FirstOrDefault(u =>
+                u.Email == email &&
+                u.PasswordHash == password);
         }
 
         public bool Register(string email, string password, string fullName)
@@ -16,14 +18,13 @@ namespace ClothingStoreNew.Services
             if (_db.Users.Any(u => u.Email == email))
                 return false;
 
-            var user = new Users
+            _db.Users.Add(new Users
             {
                 Email = email,
-                Password = password,
+                PasswordHash = password,
                 FullName = fullName
-            };
+            });
 
-            _db.Users.Add(user);
             _db.SaveChanges();
             return true;
         }

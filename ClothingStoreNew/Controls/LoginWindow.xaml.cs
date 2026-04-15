@@ -5,7 +5,7 @@ namespace ClothingStoreNew.Controls
 {
     public partial class LoginWindow : Window
     {
-        private AuthService _auth = new AuthService();
+        private readonly AuthService _auth = new AuthService();
 
         public LoginWindow()
         {
@@ -15,10 +15,16 @@ namespace ClothingStoreNew.Controls
         private void Login_Click(object sender, RoutedEventArgs e)
         {
             var user = _auth.Login(EmailBox.Text, PasswordBox.Password);
+
             if (user != null)
             {
-                new MainWindow().Show();
-                Close();
+                MessageBox.Show("Вход успешен!");
+
+                var main = new MainWindow();
+                main.Show();
+
+                Application.Current.MainWindow = main;
+                this.Close();
             }
             else
             {
@@ -28,7 +34,10 @@ namespace ClothingStoreNew.Controls
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-            new RegisterWindow().Show();
+            var reg = new RegisterWindow();
+            reg.Show();
+
+            this.Close(); // ❗ ВАЖНО: без Hide()
         }
     }
 }
