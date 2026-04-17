@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище ClothingStoreEntities" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Хранилище OnlineStoreDbModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__EFMigrationsHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -17,7 +17,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="CartItems">
           <Key>
@@ -33,7 +33,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
         <EntityType Name="OrderItems">
           <Key>
@@ -51,20 +51,20 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
-          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
-          <Property Name="Status" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" />
-          <Property Name="Size" Type="nvarchar(max)" />
+          <Property Name="Name" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Size" Type="nvarchar" MaxLength="100" />
           <Property Name="Price" Type="decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="ImagePath" Type="nvarchar(max)" />
-          <Property Name="BrandId" Type="int" />
-          <Property Name="CategoryId" Type="int" />
+          <Property Name="ImagePath" Type="nvarchar" MaxLength="500" />
+          <Property Name="BrandId" Type="int" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Reviews">
           <Key>
@@ -75,18 +75,18 @@
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="Rating" Type="int" Nullable="false" />
           <Property Name="Comment" Type="nvarchar(max)" />
-          <Property Name="CreatedAt" Type="datetime2" Precision="7" Nullable="false" />
+          <Property Name="CreatedAt" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Email" Type="nvarchar" MaxLength="450" Nullable="false" />
-          <Property Name="PasswordHash" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="FullName" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="255" Nullable="false" />
         </EntityType>
-        <Association Name="FK_CartItems_Products_ProductId">
+        <Association Name="FK_CartItems_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -100,7 +100,21 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderItems_Orders_OrderId">
+        <Association Name="FK_CartItems_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderItems_Orders">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -114,7 +128,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderItems_Products_ProductId">
+        <Association Name="FK_OrderItems_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -128,7 +142,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_Users_UserId">
+        <Association Name="FK_Orders_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -142,8 +156,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_Brands_BrandId">
-          <End Role="Brands" Type="Self.Brands" Multiplicity="0..1" />
+        <Association Name="FK_Products_Brands">
+          <End Role="Brands" Type="Self.Brands" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Brands">
@@ -154,8 +170,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_Categories_CategoryId">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+        <Association Name="FK_Products_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -166,7 +184,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Reviews_Products_ProductId">
+        <Association Name="FK_Reviews_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -180,7 +198,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Reviews_Users_UserId">
+        <Association Name="FK_Reviews_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -194,7 +212,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="Хранилище ClothingStoreEntitiesContainer">
+        <EntityContainer Name="Хранилище OnlineStoreDbModelContainer">
           <EntitySet Name="__EFMigrationsHistory" EntityType="Self.__EFMigrationsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Brands" EntityType="Self.Brands" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CartItems" EntityType="Self.CartItems" Schema="dbo" store:Type="Tables" />
@@ -204,35 +222,39 @@
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Reviews" EntityType="Self.Reviews" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_CartItems_Products_ProductId" Association="Self.FK_CartItems_Products_ProductId">
+          <AssociationSet Name="FK_CartItems_Products" Association="Self.FK_CartItems_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="CartItems" EntitySet="CartItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderItems_Orders_OrderId" Association="Self.FK_OrderItems_Orders_OrderId">
+          <AssociationSet Name="FK_CartItems_Users" Association="Self.FK_CartItems_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderItems_Products_ProductId" Association="Self.FK_OrderItems_Products_ProductId">
+          <AssociationSet Name="FK_OrderItems_Products" Association="Self.FK_OrderItems_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_Orders_Users_UserId" Association="Self.FK_Orders_Users_UserId">
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_Brands_BrandId" Association="Self.FK_Products_Brands_BrandId">
+          <AssociationSet Name="FK_Products_Brands" Association="Self.FK_Products_Brands">
             <End Role="Brands" EntitySet="Brands" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_Categories_CategoryId" Association="Self.FK_Products_Categories_CategoryId">
+          <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_Reviews_Products_ProductId" Association="Self.FK_Reviews_Products_ProductId">
+          <AssociationSet Name="FK_Reviews_Products" Association="Self.FK_Reviews_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="Reviews" EntitySet="Reviews" />
           </AssociationSet>
-          <AssociationSet Name="FK_Reviews_Users_UserId" Association="Self.FK_Reviews_Users_UserId">
+          <AssociationSet Name="FK_Reviews_Users" Association="Self.FK_Reviews_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Reviews" EntitySet="Reviews" />
           </AssociationSet>
@@ -241,7 +263,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="ClothingStoreEntities" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="OnlineStoreDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="C__EFMigrationsHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -254,8 +276,8 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Brands_BrandId" FromRole="Brands" ToRole="Products" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Brands" FromRole="Brands" ToRole="Products" />
         </EntityType>
         <EntityType Name="CartItems">
           <Key>
@@ -265,15 +287,16 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_CartItems_Products_ProductId" FromRole="CartItems" ToRole="Products" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_CartItems_Products" FromRole="CartItems" ToRole="Products" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_CartItems_Users" FromRole="CartItems" ToRole="Users" />
         </EntityType>
         <EntityType Name="Categories">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Categories_CategoryId" FromRole="Categories" ToRole="Products" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Categories" FromRole="Categories" ToRole="Products" />
         </EntityType>
         <EntityType Name="OrderItems">
           <Key>
@@ -284,8 +307,8 @@
           <Property Name="ProductId" Type="Int32" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_OrderItems_Orders_OrderId" FromRole="OrderItems" ToRole="Orders" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_OrderItems_Products_ProductId" FromRole="OrderItems" ToRole="Products" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_OrderItems_Orders" FromRole="OrderItems" ToRole="Orders" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_OrderItems_Products" FromRole="OrderItems" ToRole="Products" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -293,27 +316,27 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
-          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders_OrderId" FromRole="Orders" ToRole="OrderItems" />
-          <NavigationProperty Name="Users" Relationship="Self.FK_Orders_Users_UserId" FromRole="Orders" ToRole="Users" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Orders" FromRole="Orders" ToRole="OrderItems" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Size" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Size" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-          <Property Name="ImagePath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BrandId" Type="Int32" />
-          <Property Name="CategoryId" Type="Int32" />
-          <NavigationProperty Name="Brands" Relationship="Self.FK_Products_Brands_BrandId" FromRole="Products" ToRole="Brands" />
-          <NavigationProperty Name="CartItems" Relationship="Self.FK_CartItems_Products_ProductId" FromRole="Products" ToRole="CartItems" />
-          <NavigationProperty Name="Categories" Relationship="Self.FK_Products_Categories_CategoryId" FromRole="Products" ToRole="Categories" />
-          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Products_ProductId" FromRole="Products" ToRole="OrderItems" />
-          <NavigationProperty Name="Reviews" Relationship="Self.FK_Reviews_Products_ProductId" FromRole="Products" ToRole="Reviews" />
+          <Property Name="ImagePath" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="BrandId" Type="Int32" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Brands" Relationship="Self.FK_Products_Brands" FromRole="Products" ToRole="Brands" />
+          <NavigationProperty Name="CartItems" Relationship="Self.FK_CartItems_Products" FromRole="Products" ToRole="CartItems" />
+          <NavigationProperty Name="Categories" Relationship="Self.FK_Products_Categories" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="OrderItems" Relationship="Self.FK_OrderItems_Products" FromRole="Products" ToRole="OrderItems" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK_Reviews_Products" FromRole="Products" ToRole="Reviews" />
         </EntityType>
         <EntityType Name="Reviews">
           <Key>
@@ -324,23 +347,26 @@
           <Property Name="UserId" Type="Int32" Nullable="false" />
           <Property Name="Rating" Type="Int32" Nullable="false" />
           <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="7" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Reviews_Products_ProductId" FromRole="Reviews" ToRole="Products" />
-          <NavigationProperty Name="Users" Relationship="Self.FK_Reviews_Users_UserId" FromRole="Reviews" ToRole="Users" />
+          <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Reviews_Products" FromRole="Reviews" ToRole="Products" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Reviews_Users" FromRole="Reviews" ToRole="Users" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Email" Type="String" MaxLength="450" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PasswordHash" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="FullName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users_UserId" FromRole="Users" ToRole="Orders" />
-          <NavigationProperty Name="Reviews" Relationship="Self.FK_Reviews_Users_UserId" FromRole="Users" ToRole="Reviews" />
+          <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CartItems" Relationship="Self.FK_CartItems_Users" FromRole="Users" ToRole="CartItems" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+          <NavigationProperty Name="Reviews" Relationship="Self.FK_Reviews_Users" FromRole="Users" ToRole="Reviews" />
         </EntityType>
-        <Association Name="FK_Products_Brands_BrandId">
-          <End Role="Brands" Type="Self.Brands" Multiplicity="0..1" />
+        <Association Name="FK_Products_Brands">
+          <End Role="Brands" Type="Self.Brands" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Brands">
@@ -351,7 +377,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_CartItems_Products_ProductId">
+        <Association Name="FK_CartItems_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -365,8 +391,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Products_Categories_CategoryId">
-          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+        <Association Name="FK_CartItems_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Products" Type="Self.Products" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Categories">
@@ -377,7 +419,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderItems_Orders_OrderId">
+        <Association Name="FK_OrderItems_Orders">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -391,7 +433,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_OrderItems_Products_ProductId">
+        <Association Name="FK_OrderItems_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -405,7 +447,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Orders_Users_UserId">
+        <Association Name="FK_Orders_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -419,7 +461,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Reviews_Products_ProductId">
+        <Association Name="FK_Reviews_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -433,7 +475,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Reviews_Users_UserId">
+        <Association Name="FK_Reviews_Users">
           <End Role="Users" Type="Self.Users" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
@@ -447,7 +489,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="ClothingStoreEntities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="OnlineStoreDbEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__EFMigrationsHistory" EntityType="Self.C__EFMigrationsHistory" />
           <EntitySet Name="Brands" EntityType="Self.Brands" />
           <EntitySet Name="CartItems" EntityType="Self.CartItems" />
@@ -457,35 +499,39 @@
           <EntitySet Name="Products" EntityType="Self.Products" />
           <EntitySet Name="Reviews" EntityType="Self.Reviews" />
           <EntitySet Name="Users" EntityType="Self.Users" />
-          <AssociationSet Name="FK_Products_Brands_BrandId" Association="Self.FK_Products_Brands_BrandId">
+          <AssociationSet Name="FK_Products_Brands" Association="Self.FK_Products_Brands">
             <End Role="Brands" EntitySet="Brands" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_CartItems_Products_ProductId" Association="Self.FK_CartItems_Products_ProductId">
+          <AssociationSet Name="FK_CartItems_Products" Association="Self.FK_CartItems_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="CartItems" EntitySet="CartItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_Products_Categories_CategoryId" Association="Self.FK_Products_Categories_CategoryId">
+          <AssociationSet Name="FK_CartItems_Users" Association="Self.FK_CartItems_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
             <End Role="Categories" EntitySet="Categories" />
             <End Role="Products" EntitySet="Products" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderItems_Orders_OrderId" Association="Self.FK_OrderItems_Orders_OrderId">
+          <AssociationSet Name="FK_OrderItems_Orders" Association="Self.FK_OrderItems_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_OrderItems_Products_ProductId" Association="Self.FK_OrderItems_Products_ProductId">
+          <AssociationSet Name="FK_OrderItems_Products" Association="Self.FK_OrderItems_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="OrderItems" EntitySet="OrderItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_Orders_Users_UserId" Association="Self.FK_Orders_Users_UserId">
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK_Reviews_Products_ProductId" Association="Self.FK_Reviews_Products_ProductId">
+          <AssociationSet Name="FK_Reviews_Products" Association="Self.FK_Reviews_Products">
             <End Role="Products" EntitySet="Products" />
             <End Role="Reviews" EntitySet="Reviews" />
           </AssociationSet>
-          <AssociationSet Name="FK_Reviews_Users_UserId" Association="Self.FK_Reviews_Users_UserId">
+          <AssociationSet Name="FK_Reviews_Users" Association="Self.FK_Reviews_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Reviews" EntitySet="Reviews" />
           </AssociationSet>
@@ -495,9 +541,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище ClothingStoreEntitiesContainer" CdmEntityContainer="ClothingStoreEntities2">
+        <EntityContainerMapping StorageEntityContainer="Хранилище OnlineStoreDbModelContainer" CdmEntityContainer="OnlineStoreDbEntities">
           <EntitySetMapping Name="C__EFMigrationsHistory">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.C__EFMigrationsHistory">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.C__EFMigrationsHistory">
               <MappingFragment StoreEntitySet="__EFMigrationsHistory">
                 <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
                 <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
@@ -505,7 +551,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Brands">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.Brands">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.Brands">
               <MappingFragment StoreEntitySet="Brands">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -513,7 +559,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="CartItems">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.CartItems">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.CartItems">
               <MappingFragment StoreEntitySet="CartItems">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -523,7 +569,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.Categories">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.Categories">
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -531,7 +577,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrderItems">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.OrderItems">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.OrderItems">
               <MappingFragment StoreEntitySet="OrderItems">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
@@ -542,7 +588,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Orders">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.Orders">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.Orders">
               <MappingFragment StoreEntitySet="Orders">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
@@ -552,7 +598,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.Products">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.Products">
               <MappingFragment StoreEntitySet="Products">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -565,7 +611,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Reviews">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.Reviews">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.Reviews">
               <MappingFragment StoreEntitySet="Reviews">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProductId" ColumnName="ProductId" />
@@ -577,7 +623,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Users">
-            <EntityTypeMapping TypeName="ClothingStoreEntities.Users">
+            <EntityTypeMapping TypeName="OnlineStoreDbModel.Users">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

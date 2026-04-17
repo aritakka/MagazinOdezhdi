@@ -17,6 +17,7 @@ namespace ClothingStoreNew
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Users()
         {
+            this.CartItems = new HashSet<CartItems>();
             this.Orders = new HashSet<Orders>();
             this.Reviews = new HashSet<Reviews>();
         }
@@ -26,6 +27,8 @@ namespace ClothingStoreNew
         public string PasswordHash { get; set; }
         public string FullName { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CartItems> CartItems { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

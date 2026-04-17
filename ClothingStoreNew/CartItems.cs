@@ -20,5 +20,6 @@ namespace ClothingStoreNew
         public int UserId { get; set; }
     
         public virtual Products Products { get; set; }
+        public virtual Users Users { get; set; }
     }
 }

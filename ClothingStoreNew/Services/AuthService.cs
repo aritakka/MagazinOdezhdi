@@ -1,32 +1,41 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace ClothingStoreNew.Services
 {
     public class AuthService
     {
-        private readonly ClothingStoreEntities2 _db = new ClothingStoreEntities2();
-
         public Users Login(string email, string password)
         {
-            return _db.Users.FirstOrDefault(u =>
-                u.Email == email &&
-                u.PasswordHash == password);
+            using (var db = new OnlineStoreDbEntities())
+            {
+                return db.Users.FirstOrDefault(u =>
+                    u.Email == email &&
+                    u.PasswordHash == password);
+            }
         }
 
         public bool Register(string email, string password, string fullName)
         {
-            if (_db.Users.Any(u => u.Email == email))
-                return false;
-
-            _db.Users.Add(new Users
+            using (var db = new OnlineStoreDbEntities())
             {
-                Email = email,
-                PasswordHash = password,
-                FullName = fullName
-            });
+                var exists = db.Users.Any(u => u.Email == email);
 
-            _db.SaveChanges();
-            return true;
+                if (exists)
+                    return false;
+
+                var user = new Users
+                {
+                    Email = email,
+                    PasswordHash = password,
+                    FullName = fullName
+                };
+
+                db.Users.Add(user);
+                db.SaveChanges();
+
+                return true;
+            }
         }
     }
 }

@@ -1,11 +1,15 @@
-﻿using ClothingStoreNew;
-using System.Linq;
-public class Test
-{
-    public void Check()
-    {
-        var db = new ClothingStoreEntities2();
+﻿using System.Linq;
 
-        var users = db.Users.ToList();
+namespace ClothingStoreNew
+{
+    public class Test
+    {
+        public void Check()
+        {
+            using (var db = new OnlineStoreDbEntities())
+            {
+                var users = db.Users.ToList();
+            }
+        }
     }
 }
