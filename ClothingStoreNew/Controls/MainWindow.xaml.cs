@@ -1,32 +1,22 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using ClothingStoreNew.ViewModels;
 
 namespace ClothingStoreNew
 {
-    public partial class MainWindow : Window, INotifyPropertyChanged
+    public partial class MainWindow : Window
     {
-        public ObservableCollection<ProductVM> Products { get; set; }
-        public ObservableCollection<Products> Cart { get; set; } = new ObservableCollection<Products>();
+        public ObservableCollection<Products> Products { get; set; }
 
-        private int _cartCount;
-        public int CartCount
-        {
-            get => _cartCount;
-            set
-            {
-                _cartCount = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CartCount)));
-            }
-        }
+        public static ObservableCollection<CartItem> Cart = new ObservableCollection<CartItem>();
+
+        public int CartCount => Cart.Count;
 
         public MainWindow()
         {
             InitializeComponent();
-
             LoadProducts();
-
             DataContext = this;
         }
 
@@ -34,61 +24,29 @@ namespace ClothingStoreNew
         {
             using (var db = new OnlineStoreDbEntities())
             {
-                Products = new ObservableCollection<ProductVM>(
-                    db.Products.ToList().Select(p => new ProductVM
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Price = p.Price,
-                        Size = p.Size,
-                        IsInCart = false
-                    })
+                Products = new ObservableCollection<Products>(
+                    db.Products.ToList()
                 );
             }
         }
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
-            var product = (ProductVM)((FrameworkElement)sender).Tag;
+            var product = (Products)((FrameworkElement)sender).Tag;
 
-            if (!product.IsInCart)
+            Cart.Add(new CartItem
             {
-                product.IsInCart = true;
-                product.ButtonText = "Добавлено ✔";
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price
+            });
 
-                using (var db = new OnlineStoreDbEntities())
-                {
-                    var entity = db.Products.First(x => x.Id == product.Id);
-                    Cart.Add(entity);
-                }
-
-                CartCount = Cart.Count;
-            }
+            MessageBox.Show("Добавлено в корзину!");
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-    }
-
-    public class ProductVM : INotifyPropertyChanged
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public decimal Price { get; set; }
-        public string Size { get; set; }
-
-        private string _buttonText = "В корзину";
-        public string ButtonText
+        private void OpenCart_Click(object sender, RoutedEventArgs e)
         {
-            get => _buttonText;
-            set
-            {
-                _buttonText = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ButtonText)));
-            }
+            new CartWindow().Show();
         }
-
-        public bool IsInCart { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

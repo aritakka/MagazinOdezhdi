@@ -70,6 +70,9 @@
     <Compile Include="CartItems.cs">
       <DependentUpon>ModelClothingStore.tt</DependentUpon>
     </Compile>
+    <Compile Include="CartWindow.xaml.cs">
+      <DependentUpon>CartWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Categories.cs">
       <DependentUpon>ModelClothingStore.tt</DependentUpon>
     </Compile>
@@ -114,6 +117,11 @@
     <Compile Include="Users.cs">
       <DependentUpon>ModelClothingStore.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CartItem.cs" />
+    <Page Include="CartWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
