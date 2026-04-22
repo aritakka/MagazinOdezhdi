@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 namespace ClothingStoreNew.Services
 {
@@ -7,7 +6,7 @@ namespace ClothingStoreNew.Services
     {
         public Users Login(string email, string password)
         {
-            using (var db = new OnlineStoreDbEntities())
+            using (var db = new OnlineStoreDbEntities1())
             {
                 return db.Users.FirstOrDefault(u =>
                     u.Email == email &&
@@ -17,7 +16,7 @@ namespace ClothingStoreNew.Services
 
         public bool Register(string email, string password, string fullName)
         {
-            using (var db = new OnlineStoreDbEntities())
+            using (var db = new OnlineStoreDbEntities1())
             {
                 var exists = db.Users.Any(u => u.Email == email);
 
@@ -28,7 +27,8 @@ namespace ClothingStoreNew.Services
                 {
                     Email = email,
                     PasswordHash = password,
-                    FullName = fullName
+                    FullName = fullName,
+                    Role = "User"
                 };
 
                 db.Users.Add(user);

@@ -13,10 +13,10 @@ namespace ClothingStoreNew
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class OnlineStoreDbEntities : DbContext
+    public partial class OnlineStoreDbEntities1 : DbContext
     {
-        public OnlineStoreDbEntities()
-            : base("name=OnlineStoreDbEntities")
+        public OnlineStoreDbEntities1()
+            : base("name=OnlineStoreDbEntities1")
         {
         }
     

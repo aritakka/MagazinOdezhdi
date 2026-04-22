@@ -85,6 +85,7 @@
           <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="PasswordHash" Type="nvarchar" MaxLength="500" Nullable="false" />
           <Property Name="FullName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <Association Name="FK_CartItems_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1">
@@ -359,6 +360,7 @@
           <Property Name="Email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PasswordHash" Type="String" MaxLength="500" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="FullName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="CartItems" Relationship="Self.FK_CartItems_Users" FromRole="Users" ToRole="CartItems" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
           <NavigationProperty Name="Reviews" Relationship="Self.FK_Reviews_Users" FromRole="Users" ToRole="Reviews" />
@@ -489,7 +491,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="OnlineStoreDbEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="OnlineStoreDbEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__EFMigrationsHistory" EntityType="Self.C__EFMigrationsHistory" />
           <EntitySet Name="Brands" EntityType="Self.Brands" />
           <EntitySet Name="CartItems" EntityType="Self.CartItems" />
@@ -541,7 +543,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="Хранилище OnlineStoreDbModelContainer" CdmEntityContainer="OnlineStoreDbEntities">
+        <EntityContainerMapping StorageEntityContainer="Хранилище OnlineStoreDbModelContainer" CdmEntityContainer="OnlineStoreDbEntities1">
           <EntitySetMapping Name="C__EFMigrationsHistory">
             <EntityTypeMapping TypeName="OnlineStoreDbModel.C__EFMigrationsHistory">
               <MappingFragment StoreEntitySet="__EFMigrationsHistory">
@@ -629,6 +631,7 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

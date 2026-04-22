@@ -1,7 +1,8 @@
-﻿using System;
+﻿using ClothingStoreNew.Services;
+using ClothingStoreNew.ViewModels;
+using System;
 using System.Linq;
 using System.Windows;
-using ClothingStoreNew.ViewModels;
 
 namespace ClothingStoreNew
 {
@@ -10,80 +11,83 @@ namespace ClothingStoreNew
         public CartWindow()
         {
             InitializeComponent();
-
-            DataContext = MainWindow.Cart;
-            UpdateTotal();
+            LoadCart();
         }
 
-        private void UpdateTotal()
+        private void LoadCart()
         {
-            decimal total = MainWindow.Cart.Sum(i => i.Total);
-            TotalText.Text = total.ToString("0.00");
+            var cart = CartManager.GetFullCart()
+                .Select(x => new CartItem
+                {
+                    ProductId = x.product.Id,
+                    Name = x.product.Name,
+                    Price = x.product.Price,
+                    Quantity = x.qty
+                })
+                .ToList();
+
+            CartGrid.ItemsSource = cart;
+
+            TotalText.Text = cart.Sum(x => x.Total).ToString("0.00");
         }
 
-        // 🔴 УДАЛЕНИЕ ТОВАРА
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
             var item = (CartItem)((FrameworkElement)sender).Tag;
 
-            if (item.Quantity > 1)
+            var existing = CartManager.Items.FirstOrDefault(x => x.ProductId == item.ProductId);
+
+            if (existing != null)
             {
-                item.Quantity--;
-            }
-            else
-            {
-                MainWindow.Cart.Remove(item);
+                if (existing.Quantity > 1)
+                    existing.Quantity--;
+                else
+                    CartManager.Items.Remove(existing);
             }
 
-            CartGrid.Items.Refresh();
-            UpdateTotal();
+            LoadCart();
         }
 
-        // 🟢 ОФОРМЛЕНИЕ ЗАКАЗА
         private void Checkout_Click(object sender, RoutedEventArgs e)
         {
-            if (App.CurrentUser == null)
-            {
-                MessageBox.Show("Вы не авторизованы!");
+            if (!CartManager.Items.Any())
                 return;
-            }
 
-            if (!MainWindow.Cart.Any())
-            {
-                MessageBox.Show("Корзина пуста!");
-                return;
-            }
-
-            using (var db = new OnlineStoreDbEntities())
+            using (var db = new OnlineStoreDbEntities1())
             {
                 var order = new Orders
                 {
                     UserId = App.CurrentUser.Id,
-                    CreatedAt = DateTime.Now,
-                    Status = "Новый"
+                    Status = "Новый",
+
+                    // ✅ правильное поле из EDMX
+                    CreatedAt = DateTime.Now
                 };
 
                 db.Orders.Add(order);
                 db.SaveChanges();
 
-                foreach (var item in MainWindow.Cart)
+                foreach (var item in CartManager.Items)
                 {
+                    var product = db.Products.First(p => p.Id == item.ProductId);
+
                     db.OrderItems.Add(new OrderItems
                     {
                         OrderId = order.Id,
-                        ProductId = item.ProductId,
+                        ProductId = product.Id,
                         Quantity = item.Quantity,
-                        Price = item.Price
+                        Price = product.Price
                     });
                 }
 
                 db.SaveChanges();
             }
 
-            MainWindow.Cart.Clear();
+            CartManager.Items.Clear();
 
-            MessageBox.Show("Заказ успешно оформлен!");
-            this.Close();
+            MessageBox.Show("Заказ оформлен!");
+
+            Close();
         }
     }
 }

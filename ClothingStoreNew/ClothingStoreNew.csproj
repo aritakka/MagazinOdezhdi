@@ -65,46 +65,49 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Brands.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="CartItems.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="CartWindow.xaml.cs">
       <DependentUpon>CartWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Categories.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClothingStoreModel1.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClothingStoreModel1.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClothingStoreModel1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClothingStoreModel1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ClothingStoreModel1.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AdminWindow.xaml.cs">
+      <DependentUpon>AdminWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="C__EFMigrationsHistory.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ModelClothingStore.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelClothingStore.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ModelClothingStore.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ModelClothingStore.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelClothingStore.edmx</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="OrderItems.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="Orders.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="Products.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="Reviews.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Controls\LoginWindow.xaml.cs">
@@ -113,12 +116,17 @@
     <Compile Include="Controls\RegisterWindow.xaml.cs">
       <DependentUpon>RegisterWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\CartManager.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Users.cs">
-      <DependentUpon>ModelClothingStore.tt</DependentUpon>
+      <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\CartItem.cs" />
     <Page Include="CartWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AdminWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -161,12 +169,12 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EntityDeploy Include="ModelClothingStore.edmx">
+    <EntityDeploy Include="ClothingStoreModel1.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelClothingStore.Designer.cs</LastGenOutput>
+      <LastGenOutput>ClothingStoreModel1.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="ModelClothingStore.edmx.diagram">
-      <DependentUpon>ModelClothingStore.edmx</DependentUpon>
+    <None Include="ClothingStoreModel1.edmx.diagram">
+      <DependentUpon>ClothingStoreModel1.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -185,15 +193,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ModelClothingStore.Context.tt">
+    <Content Include="ClothingStoreModel1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelClothingStore.edmx</DependentUpon>
-      <LastGenOutput>ModelClothingStore.Context.cs</LastGenOutput>
+      <DependentUpon>ClothingStoreModel1.edmx</DependentUpon>
+      <LastGenOutput>ClothingStoreModel1.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="ModelClothingStore.tt">
+    <Content Include="ClothingStoreModel1.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelClothingStore.edmx</DependentUpon>
-      <LastGenOutput>ModelClothingStore.cs</LastGenOutput>
+      <DependentUpon>ClothingStoreModel1.edmx</DependentUpon>
+      <LastGenOutput>ClothingStoreModel1.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

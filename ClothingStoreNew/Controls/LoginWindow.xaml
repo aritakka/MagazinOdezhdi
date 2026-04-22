@@ -4,6 +4,7 @@
         Title="Вход" Height="250" Width="300">
 
     <StackPanel Margin="20">
+
         <TextBlock Text="Email:"/>
         <TextBox x:Name="EmailBox" Margin="5"/>
 
@@ -12,5 +13,6 @@
 
         <Button Content="Войти" Click="Login_Click" Margin="5"/>
         <Button Content="Регистрация" Click="Register_Click" Margin="5"/>
+
     </StackPanel>
 </Window>

@@ -5,25 +5,26 @@
 
     <DockPanel>
 
-        <!-- Верх -->
+        <!-- TOP -->
         <StackPanel DockPanel.Dock="Top"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
 
             <Button Content="🛒 Корзина"
-                    Click="OpenCart_Click"
-                    Margin="0,0,10,0"/>
+                    Click="Cart_Click"
+                    Margin="5"/>
 
-            <TextBlock Text="{Binding CartCount}"
-                       VerticalAlignment="Center"
-                       FontSize="16"/>
+            <Button Content="⚙ Админ"
+                    Click="Admin_Click"
+                    Margin="5"
+                    Visibility="{Binding AdminVisibility}"/>
+
         </StackPanel>
 
-        <!-- Товары -->
+        <!-- PRODUCTS -->
         <ScrollViewer>
             <ItemsControl ItemsSource="{Binding Products}">
-
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel/>
@@ -32,38 +33,15 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-
-                        <Border BorderBrush="Gray"
-                                BorderThickness="1"
-                                Margin="10"
-                                Padding="10"
-                                Width="180">
-
+                        <Border BorderBrush="Gray" BorderThickness="1" Margin="10" Padding="10" Width="180">
                             <StackPanel>
-
-                                <TextBlock Text="{Binding Name}"
-                                           FontWeight="Bold"
-                                           TextAlignment="Center"/>
-
-                                <TextBlock Text="{Binding Price}"
-                                           Foreground="Green"
-                                           TextAlignment="Center"/>
-
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" TextAlignment="Center"/>
+                                <TextBlock Text="{Binding Price}" Foreground="Green" TextAlignment="Center"/>
                                 <Button Content="В корзину"
                                         Click="AddToCart_Click"
-                                        Tag="{Binding}" />
-
-                                <!-- админ кнопка -->
-                                <Button Content="Изменить цену"
-                                        Click="EditPrice_Click"
-                                        Tag="{Binding}"
-                                        x:Name="AdminBtn"
-                                        Visibility="Collapsed"/>
-
+                                        Tag="{Binding}"/>
                             </StackPanel>
-
                         </Border>
-
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

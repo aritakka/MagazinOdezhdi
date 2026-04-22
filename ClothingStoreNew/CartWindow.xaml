@@ -11,18 +11,17 @@
         </Grid.RowDefinitions>
 
         <DataGrid x:Name="CartGrid"
-                  ItemsSource="{Binding}"
                   AutoGenerateColumns="False"
                   CanUserAddRows="False"
                   Margin="0,0,0,10">
 
             <DataGrid.Columns>
+
                 <DataGridTextColumn Header="Товар" Binding="{Binding Name}" Width="*"/>
                 <DataGridTextColumn Header="Цена" Binding="{Binding Price}" Width="80"/>
                 <DataGridTextColumn Header="Кол-во" Binding="{Binding Quantity}" Width="80"/>
                 <DataGridTextColumn Header="Сумма" Binding="{Binding Total}" Width="100"/>
 
-                <!-- КНОПКА УДАЛЕНИЯ -->
                 <DataGridTemplateColumn Header="Действие" Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

@@ -1,0 +1,78 @@
+﻿<Window x:Class="ClothingStoreNew.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Админ панель" Height="600" Width="900">
+
+    <Grid>
+        <TabControl>
+
+            <!-- PRODUCTS -->
+            <TabItem Header="Товары">
+
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Таблица товаров -->
+                    <DataGrid x:Name="ProductsGrid"
+                              AutoGenerateColumns="True"
+                              Grid.Column="0"
+                              Margin="0,0,10,0"/>
+
+                    <!-- Панель управления -->
+                    <StackPanel Grid.Column="1">
+
+                        <TextBlock Text="Название товара" Margin="0,0,0,5"/>
+                        <TextBox x:Name="NameBox" Margin="0,0,0,10"/>
+
+                        <TextBlock Text="Цена" Margin="0,0,0,5"/>
+                        <TextBox x:Name="PriceBox" Margin="0,0,0,10"/>
+
+                        <Button Content="Добавить" Click="AddProduct" Margin="0,5"/>
+                        <Button Content="Обновить" Click="UpdateProduct" Margin="0,5"/>
+                        <Button Content="Удалить" Click="DeleteProduct" Margin="0,5"/>
+
+                    </StackPanel>
+
+                </Grid>
+
+            </TabItem>
+
+            <!-- USERS -->
+            <TabItem Header="Пользователи">
+
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Таблица пользователей -->
+                    <DataGrid x:Name="UsersGrid"
+                              AutoGenerateColumns="True"
+                              Grid.Column="0"
+                              Margin="0,0,10,0"/>
+
+                    <!-- Управление ролями -->
+                    <StackPanel Grid.Column="1">
+
+                        <TextBlock Text="Роль пользователя" Margin="0,0,0,5"/>
+
+                        <ComboBox x:Name="RoleBox" Margin="0,0,0,10">
+                            <ComboBoxItem Content="User"/>
+                            <ComboBoxItem Content="Admin"/>
+                        </ComboBox>
+
+                        <Button Content="Сменить роль" Click="ChangeRole"/>
+
+                    </StackPanel>
+
+                </Grid>
+
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

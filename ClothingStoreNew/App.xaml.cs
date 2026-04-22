@@ -6,6 +6,7 @@ namespace ClothingStoreNew
     {
         public static Users CurrentUser { get; set; }
 
-        public static bool IsAdmin { get; set; } = false;
+        public static bool IsAdmin =>
+            CurrentUser != null && CurrentUser.Role == "Admin";
     }
 }
