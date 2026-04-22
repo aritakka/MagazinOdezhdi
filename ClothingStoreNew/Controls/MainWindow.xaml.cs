@@ -9,9 +9,9 @@ namespace ClothingStoreNew
     {
         public ObservableCollection<Products> Products { get; set; }
 
-        public static ObservableCollection<CartItem> Cart = new ObservableCollection<CartItem>();
+        public static ObservableCollection<CartItem> Cart { get; set; } = new ObservableCollection<CartItem>();
 
-        public int CartCount => Cart.Count;
+        public int CartCount => Cart.Sum(x => x.Quantity);
 
         public MainWindow()
         {
@@ -24,9 +24,7 @@ namespace ClothingStoreNew
         {
             using (var db = new OnlineStoreDbEntities())
             {
-                Products = new ObservableCollection<Products>(
-                    db.Products.ToList()
-                );
+                Products = new ObservableCollection<Products>(db.Products.ToList());
             }
         }
 
@@ -34,14 +32,23 @@ namespace ClothingStoreNew
         {
             var product = (Products)((FrameworkElement)sender).Tag;
 
-            Cart.Add(new CartItem
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Price = product.Price
-            });
+            var existing = Cart.FirstOrDefault(p => p.ProductId == product.Id);
+
+            if (existing != null)
+                existing.Quantity++;
+            else
+                Cart.Add(new CartItem
+                {
+                    ProductId = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Quantity = 1
+                });
 
             MessageBox.Show("Добавлено в корзину!");
+
+            DataContext = null;
+            DataContext = this;
         }
 
         private void OpenCart_Click(object sender, RoutedEventArgs e)

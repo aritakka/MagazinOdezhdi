@@ -18,6 +18,8 @@ namespace ClothingStoreNew.Controls
 
             if (user != null)
             {
+                App.CurrentUser = user;
+
                 MessageBox.Show("Вход успешен!");
 
                 var main = new MainWindow();
@@ -36,8 +38,7 @@ namespace ClothingStoreNew.Controls
         {
             var reg = new RegisterWindow();
             reg.Show();
-
-            this.Close(); // ❗ ВАЖНО: без Hide()
+            this.Close();
         }
     }
 }
