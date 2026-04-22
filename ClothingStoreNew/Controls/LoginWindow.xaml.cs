@@ -14,13 +14,22 @@ namespace ClothingStoreNew.Controls
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            var user = _auth.Login(EmailBox.Text, PasswordBox.Password);
+            var email = EmailBox.Text;
+            var password = PasswordBox.Password;
+
+            var user = _auth.Login(email, password);
 
             if (user != null)
             {
                 App.CurrentUser = user;
 
-                MessageBox.Show("Вход успешен!");
+                // 🔴 ПРОВЕРКА НА АДМИНА
+                if (email == "1@gmail.com" && password == "1")
+                    App.IsAdmin = true;
+                else
+                    App.IsAdmin = false;
+
+                MessageBox.Show(App.IsAdmin ? "Вы вошли как админ" : "Вход успешен!");
 
                 var main = new MainWindow();
                 main.Show();

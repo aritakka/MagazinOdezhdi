@@ -16,16 +16,17 @@
                     Margin="0,0,10,0"/>
 
             <TextBlock Text="{Binding CartCount}"
-                       FontSize="16"
-                       VerticalAlignment="Center"/>
+                       VerticalAlignment="Center"
+                       FontSize="16"/>
         </StackPanel>
 
-        <!-- Каталог -->
+        <!-- Товары -->
         <ScrollViewer>
             <ItemsControl ItemsSource="{Binding Products}">
+
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -52,6 +53,13 @@
                                         Click="AddToCart_Click"
                                         Tag="{Binding}" />
 
+                                <!-- админ кнопка -->
+                                <Button Content="Изменить цену"
+                                        Click="EditPrice_Click"
+                                        Tag="{Binding}"
+                                        x:Name="AdminBtn"
+                                        Visibility="Collapsed"/>
+
                             </StackPanel>
 
                         </Border>
@@ -62,5 +70,4 @@
         </ScrollViewer>
 
     </DockPanel>
-
 </Window>
