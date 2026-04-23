@@ -71,6 +71,11 @@
                         </ComboBox>
 
                         <Button Content="Сменить роль" Click="ChangeRole"/>
+                        <Button Content="Удалить пользователя"
+        Click="DeleteUser"
+        Margin="0,5"
+        Background="Tomato"
+        Foreground="White"/>
 
                     </StackPanel>
                 </Grid>
