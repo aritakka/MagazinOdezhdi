@@ -1,7 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using ClothingStoreNew.Services;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using ClothingStoreNew.Services;
+using System.Windows.Controls;
 
 namespace ClothingStoreNew
 {
@@ -9,11 +10,17 @@ namespace ClothingStoreNew
     {
         public ObservableCollection<Products> Products { get; set; }
 
+        // 👇 ДОБАВИЛИ
+        public Visibility AdminVisibility { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
 
             LoadProducts();
+
+            // 👇 ВАЖНО: определяем видимость кнопки
+            AdminVisibility = App.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
 
             DataContext = this;
         }

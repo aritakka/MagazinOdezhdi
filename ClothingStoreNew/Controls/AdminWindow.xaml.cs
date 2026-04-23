@@ -18,6 +18,7 @@ namespace ClothingStoreNew
             {
                 ProductsGrid.ItemsSource = db.Products.ToList();
                 UsersGrid.ItemsSource = db.Users.ToList();
+                OrdersGrid.ItemsSource = db.Orders.ToList(); // 👈 добавили
             }
         }
 
@@ -71,6 +72,32 @@ namespace ClothingStoreNew
         }
 
         // USERS
+        private void AddUser(object sender, RoutedEventArgs e)
+        {
+            using (var db = new OnlineStoreDbEntities1())
+            {
+                var exists = db.Users.Any(u => u.Email == NewEmailBox.Text);
+
+                if (exists)
+                {
+                    MessageBox.Show("Пользователь уже существует");
+                    return;
+                }
+
+                db.Users.Add(new Users
+                {
+                    Email = NewEmailBox.Text,
+                    FullName = NewNameBox.Text,
+                    PasswordHash = NewPasswordBox.Text,
+                    Role = "User"
+                });
+
+                db.SaveChanges();
+            }
+
+            LoadData();
+        }
+
         private void ChangeRole(object sender, RoutedEventArgs e)
         {
             var u = (Users)UsersGrid.SelectedItem;
@@ -80,6 +107,27 @@ namespace ClothingStoreNew
                 var user = db.Users.First(x => x.Id == u.Id);
 
                 user.Role = ((ComboBoxItem)RoleBox.SelectedItem).Content.ToString();
+
+                db.SaveChanges();
+            }
+
+            LoadData();
+        }
+
+        // 🆕 ORDERS
+
+        private void UpdateOrderStatus(object sender, RoutedEventArgs e)
+        {
+            var o = (Orders)OrdersGrid.SelectedItem;
+
+            if (o == null)
+                return;
+
+            using (var db = new OnlineStoreDbEntities1())
+            {
+                var order = db.Orders.First(x => x.Id == o.Id);
+
+                order.Status = ((ComboBoxItem)OrderStatusBox.SelectedItem).Content.ToString();
 
                 db.SaveChanges();
             }

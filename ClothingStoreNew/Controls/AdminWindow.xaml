@@ -8,59 +8,64 @@
 
             <!-- PRODUCTS -->
             <TabItem Header="Товары">
-
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Таблица товаров -->
                     <DataGrid x:Name="ProductsGrid"
                               AutoGenerateColumns="True"
                               Grid.Column="0"
                               Margin="0,0,10,0"/>
 
-                    <!-- Панель управления -->
                     <StackPanel Grid.Column="1">
 
-                        <TextBlock Text="Название товара" Margin="0,0,0,5"/>
-                        <TextBox x:Name="NameBox" Margin="0,0,0,10"/>
+                        <TextBlock Text="Название товара"/>
+                        <TextBox x:Name="NameBox" Margin="0,5"/>
 
-                        <TextBlock Text="Цена" Margin="0,0,0,5"/>
-                        <TextBox x:Name="PriceBox" Margin="0,0,0,10"/>
+                        <TextBlock Text="Цена"/>
+                        <TextBox x:Name="PriceBox" Margin="0,5"/>
 
                         <Button Content="Добавить" Click="AddProduct" Margin="0,5"/>
                         <Button Content="Обновить" Click="UpdateProduct" Margin="0,5"/>
                         <Button Content="Удалить" Click="DeleteProduct" Margin="0,5"/>
 
                     </StackPanel>
-
                 </Grid>
-
             </TabItem>
 
             <!-- USERS -->
             <TabItem Header="Пользователи">
-
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Таблица пользователей -->
                     <DataGrid x:Name="UsersGrid"
                               AutoGenerateColumns="True"
                               Grid.Column="0"
                               Margin="0,0,10,0"/>
 
-                    <!-- Управление ролями -->
                     <StackPanel Grid.Column="1">
 
-                        <TextBlock Text="Роль пользователя" Margin="0,0,0,5"/>
+                        <TextBlock Text="Email"/>
+                        <TextBox x:Name="NewEmailBox" Margin="0,5"/>
 
-                        <ComboBox x:Name="RoleBox" Margin="0,0,0,10">
+                        <TextBlock Text="ФИО"/>
+                        <TextBox x:Name="NewNameBox" Margin="0,5"/>
+
+                        <TextBlock Text="Пароль"/>
+                        <TextBox x:Name="NewPasswordBox" Margin="0,5"/>
+
+                        <Button Content="Добавить пользователя"
+                                Click="AddUser"
+                                Margin="0,5"/>
+
+                        <TextBlock Text="Роль пользователя" Margin="10,10,0,5"/>
+
+                        <ComboBox x:Name="RoleBox" Margin="0,5">
                             <ComboBoxItem Content="User"/>
                             <ComboBoxItem Content="Admin"/>
                         </ComboBox>
@@ -68,9 +73,43 @@
                         <Button Content="Сменить роль" Click="ChangeRole"/>
 
                     </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- 🆕 ORDERS -->
+            <TabItem Header="Заказы">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Таблица заказов -->
+                    <DataGrid x:Name="OrdersGrid"
+                              AutoGenerateColumns="True"
+                              Grid.Column="0"
+                              Margin="0,0,10,0"/>
+
+                    <!-- Управление -->
+                    <StackPanel Grid.Column="1">
+
+                        <TextBlock Text="Статус заказа" Margin="0,0,0,5"/>
+
+                        <ComboBox x:Name="OrderStatusBox" Margin="0,0,0,10">
+                            <ComboBoxItem Content="Новый"/>
+                            <ComboBoxItem Content="В обработке"/>
+                            <ComboBoxItem Content="Отправлен"/>
+                            <ComboBoxItem Content="Завершён"/>
+                            <ComboBoxItem Content="Отменён"/>
+                        </ComboBox>
+
+                        <Button Content="Обновить статус"
+                                Click="UpdateOrderStatus"
+                                Margin="0,5"/>
+
+                    </StackPanel>
 
                 </Grid>
-
             </TabItem>
 
         </TabControl>
