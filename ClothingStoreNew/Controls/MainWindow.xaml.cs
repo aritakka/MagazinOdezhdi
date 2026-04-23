@@ -8,7 +8,6 @@ namespace ClothingStoreNew
     public partial class MainWindow : Window
     {
         public ObservableCollection<Products> Products { get; set; }
-
         public Visibility AdminVisibility { get; set; }
 
         public MainWindow()
@@ -34,9 +33,8 @@ namespace ClothingStoreNew
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
-            var product = (Products)((FrameworkElement)sender).Tag;
-
-            CartManager.Add(product);
+            var p = (Products)((FrameworkElement)sender).Tag;
+            CartManager.Add(p);
 
             MessageBox.Show("Добавлено в корзину");
         }

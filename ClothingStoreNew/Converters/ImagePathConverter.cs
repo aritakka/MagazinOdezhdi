@@ -12,9 +12,11 @@ namespace ClothingStoreNew
         {
             try
             {
-                string path = value as string;
+                if (value == null) return null;
 
-                if (string.IsNullOrEmpty(path) || !File.Exists(path))
+                string path = value.ToString();
+
+                if (!File.Exists(path))
                     return null;
 
                 return new BitmapImage(new Uri(path, UriKind.Absolute));

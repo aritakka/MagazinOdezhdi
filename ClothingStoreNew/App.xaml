@@ -1,7 +1,9 @@
 ﻿<Application x:Class="ClothingStoreNew.App"
+             xmlns:local="clr-namespace:ClothingStoreNew"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="Controls/LoginWindow.xaml">
     <Application.Resources>
+        <local:ImagePathConverter x:Key="ImageConverter"/>
     </Application.Resources>
 </Application>

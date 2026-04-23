@@ -10,7 +10,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <!-- TOP PANEL -->
+        <!-- TOP -->
         <StackPanel Orientation="Horizontal" Margin="10">
 
             <Button Content="Корзина"
@@ -30,7 +30,6 @@
         <ScrollViewer Grid.Row="1">
 
             <ItemsControl ItemsSource="{Binding Products}">
-
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel/>
@@ -49,28 +48,24 @@
 
                             <StackPanel>
 
-                                <!-- IMAGE -->
+                                <!-- IMAGE (ВАЖНО: CONVERTER) -->
                                 <Image Width="160"
                                        Height="160"
                                        Stretch="UniformToFill"
                                        Source="{Binding ImagePath}"/>
 
-                                <!-- NAME -->
                                 <TextBlock Text="{Binding Name}"
                                            FontWeight="Bold"
                                            Margin="0,8,0,0"
                                            TextWrapping="Wrap"/>
 
-                                <!-- PRICE -->
                                 <TextBlock Text="{Binding Price, StringFormat={}{0} ₽}"
                                            Foreground="Green"
                                            Margin="0,5"/>
 
-                                <!-- BUTTON -->
                                 <Button Content="В корзину"
                                         Tag="{Binding}"
-                                        Click="AddToCart_Click"
-                                        Margin="0,5"/>
+                                        Click="AddToCart_Click"/>
 
                             </StackPanel>
 
