@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace ClothingStoreNew
 {
@@ -10,17 +9,15 @@ namespace ClothingStoreNew
     {
         public ObservableCollection<Products> Products { get; set; }
 
-        // 👇 ДОБАВИЛИ
         public Visibility AdminVisibility { get; set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            LoadProducts();
-
-            // 👇 ВАЖНО: определяем видимость кнопки
             AdminVisibility = App.IsAdmin ? Visibility.Visible : Visibility.Collapsed;
+
+            LoadProducts();
 
             DataContext = this;
         }
@@ -37,9 +34,9 @@ namespace ClothingStoreNew
 
         private void AddToCart_Click(object sender, RoutedEventArgs e)
         {
-            var p = (Products)((FrameworkElement)sender).Tag;
+            var product = (Products)((FrameworkElement)sender).Tag;
 
-            CartManager.Add(p);
+            CartManager.Add(product);
 
             MessageBox.Show("Добавлено в корзину");
         }

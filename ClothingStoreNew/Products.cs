@@ -29,6 +29,9 @@ namespace ClothingStoreNew
         public string ImagePath { get; set; }
         public int BrandId { get; set; }
         public int CategoryId { get; set; }
+        public string Description { get; set; }
+        public string Category { get; set; }
+        public int Stock { get; set; }
     
         public virtual Brands Brands { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

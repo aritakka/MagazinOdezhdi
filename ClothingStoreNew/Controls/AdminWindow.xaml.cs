@@ -1,18 +1,23 @@
-﻿using System.Linq;
+﻿using Microsoft.Win32;
+using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.IO;
 
 namespace ClothingStoreNew
 {
     public partial class AdminWindow : Window
     {
+        private string selectedImagePath;
+
         public AdminWindow()
         {
             InitializeComponent();
             LoadData();
         }
 
-        // 🔄 загрузка всех данных
+        // ================= LOAD =================
         private void LoadData()
         {
             using (var db = new OnlineStoreDbEntities1())
@@ -20,21 +25,52 @@ namespace ClothingStoreNew
                 ProductsGrid.ItemsSource = db.Products.ToList();
                 UsersGrid.ItemsSource = db.Users.ToList();
                 OrdersGrid.ItemsSource = db.Orders.ToList();
+
+                CategoryBox.ItemsSource = db.Categories.ToList();
+                BrandBox.ItemsSource = db.Brands.ToList();
             }
         }
 
-        // =========================
-        // 🛍 PRODUCTS
-        // =========================
+        // ================= IMAGE =================
+        private void SelectImage_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog
+            {
+                Title = "Выберите изображение",
+                Filter = "Images|*.jpg;*.jpeg;*.png",
+                Multiselect = false
+            };
 
+            if (dlg.ShowDialog() == true)
+            {
+                selectedImagePath = dlg.FileName;
+                ImagePathText.Text = selectedImagePath;
+            }
+        }
+
+        // ================= PRODUCTS =================
         private void AddProduct(object sender, RoutedEventArgs e)
         {
             using (var db = new OnlineStoreDbEntities1())
             {
+                var cat = CategoryBox.SelectedItem as Categories;
+                var brand = BrandBox.SelectedItem as Brands;
+
+                if (cat == null || brand == null)
+                {
+                    MessageBox.Show("Выберите категорию и бренд");
+                    return;
+                }
+
                 db.Products.Add(new Products
                 {
                     Name = NameBox.Text,
-                    Price = decimal.Parse(PriceBox.Text)
+                    Price = ParseDecimal(PriceBox.Text),
+                    Description = DescriptionBox.Text,
+                    Stock = ParseInt(StockBox.Text),
+                    ImagePath = selectedImagePath,
+                    CategoryId = cat.Id,
+                    BrandId = brand.Id
                 });
 
                 db.SaveChanges();
@@ -46,15 +82,23 @@ namespace ClothingStoreNew
         private void UpdateProduct(object sender, RoutedEventArgs e)
         {
             var selected = ProductsGrid.SelectedItem as Products;
-
             if (selected == null) return;
 
             using (var db = new OnlineStoreDbEntities1())
             {
-                var product = db.Products.First(x => x.Id == selected.Id);
+                var p = db.Products.First(x => x.Id == selected.Id);
 
-                product.Name = NameBox.Text;
-                product.Price = decimal.Parse(PriceBox.Text);
+                var cat = CategoryBox.SelectedItem as Categories;
+                var brand = BrandBox.SelectedItem as Brands;
+
+                p.Name = NameBox.Text;
+                p.Price = ParseDecimal(PriceBox.Text);
+                p.Description = DescriptionBox.Text;
+                p.Stock = ParseInt(StockBox.Text);
+                p.ImagePath = selectedImagePath;
+
+                if (cat != null) p.CategoryId = cat.Id;
+                if (brand != null) p.BrandId = brand.Id;
 
                 db.SaveChanges();
             }
@@ -65,38 +109,43 @@ namespace ClothingStoreNew
         private void DeleteProduct(object sender, RoutedEventArgs e)
         {
             var selected = ProductsGrid.SelectedItem as Products;
-
-            if (selected == null)
-            {
-                MessageBox.Show("Выберите товар");
-                return;
-            }
+            if (selected == null) return;
 
             using (var db = new OnlineStoreDbEntities1())
             {
-                var product = db.Products.First(x => x.Id == selected.Id);
-
-                db.Products.Remove(product);
+                var p = db.Products.First(x => x.Id == selected.Id);
+                db.Products.Remove(p);
                 db.SaveChanges();
             }
 
             LoadData();
         }
 
-        // =========================
-        // 👤 USERS
-        // =========================
+        private void ProductsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var p = ProductsGrid.SelectedItem as Products;
+            if (p == null) return;
 
+            NameBox.Text = p.Name;
+            PriceBox.Text = p.Price.ToString();
+            DescriptionBox.Text = p.Description;
+            StockBox.Text = p.Stock.ToString();
+
+            selectedImagePath = p.ImagePath;
+            ImagePathText.Text = p.ImagePath ?? "нет файла";
+
+            using (var db = new OnlineStoreDbEntities1())
+            {
+                CategoryBox.SelectedItem = db.Categories.FirstOrDefault(x => x.Id == p.CategoryId);
+                BrandBox.SelectedItem = db.Brands.FirstOrDefault(x => x.Id == p.BrandId);
+            }
+        }
+
+        // ================= USERS =================
         private void AddUser(object sender, RoutedEventArgs e)
         {
             using (var db = new OnlineStoreDbEntities1())
             {
-                if (db.Users.Any(x => x.Email == NewEmailBox.Text))
-                {
-                    MessageBox.Show("Пользователь уже существует");
-                    return;
-                }
-
                 db.Users.Add(new Users
                 {
                     Email = NewEmailBox.Text,
@@ -113,118 +162,80 @@ namespace ClothingStoreNew
 
         private void ChangeRole(object sender, RoutedEventArgs e)
         {
-            var selected = UsersGrid.SelectedItem as Users;
-
-            if (selected == null) return;
+            var u = UsersGrid.SelectedItem as Users;
+            if (u == null) return;
 
             using (var db = new OnlineStoreDbEntities1())
             {
-                var user = db.Users.First(x => x.Id == selected.Id);
-
+                var user = db.Users.First(x => x.Id == u.Id);
                 user.Role = ((ComboBoxItem)RoleBox.SelectedItem).Content.ToString();
-
                 db.SaveChanges();
             }
 
             LoadData();
         }
 
-        // ❌ УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ (простое)
         private void DeleteUser(object sender, RoutedEventArgs e)
         {
-            var selected = UsersGrid.SelectedItem as Users;
-
-            if (selected == null)
-            {
-                MessageBox.Show("Выберите пользователя");
-                return;
-            }
-
-            var result = MessageBox.Show(
-                "Удалить пользователя?",
-                "Подтверждение",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (result != MessageBoxResult.Yes)
-                return;
+            var u = UsersGrid.SelectedItem as Users;
+            if (u == null) return;
 
             using (var db = new OnlineStoreDbEntities1())
             {
-                var user = db.Users.FirstOrDefault(x => x.Id == selected.Id);
-
-                if (user != null)
-                {
-                    db.Users.Remove(user);
-                    db.SaveChanges();
-                }
+                var user = db.Users.First(x => x.Id == u.Id);
+                db.Users.Remove(user);
+                db.SaveChanges();
             }
 
             LoadData();
-
-            MessageBox.Show("Пользователь удалён");
         }
 
-        // =========================
-        // 📦 ORDERS
-        // =========================
-
+        // ================= ORDERS =================
         private void OrdersGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selected = OrdersGrid.SelectedItem as Orders;
-
-            if (selected == null)
-                return;
+            var o = OrdersGrid.SelectedItem as Orders;
+            if (o == null) return;
 
             using (var db = new OnlineStoreDbEntities1())
             {
                 var items = db.OrderItems
-                    .Where(x => x.OrderId == selected.Id)
+                    .Where(x => x.OrderId == o.Id)
                     .Select(x => new
                     {
-                        x.Id,
                         Product = x.Products.Name,
                         x.Quantity,
                         x.Price,
                         Total = x.Quantity * x.Price
-                    })
-                    .ToList();
+                    }).ToList();
 
                 OrderItemsGrid.ItemsSource = items;
-
                 OrderTotalText.Text = items.Sum(x => x.Total).ToString("0.00");
 
-                var user = db.Users.FirstOrDefault(x => x.Id == selected.UserId);
-                OrderUserText.Text = user != null ? user.Email : "-";
-
-                foreach (ComboBoxItem item in OrderStatusBox.Items)
-                {
-                    if (item.Content.ToString() == selected.Status)
-                    {
-                        OrderStatusBox.SelectedItem = item;
-                        break;
-                    }
-                }
+                var user = db.Users.FirstOrDefault(x => x.Id == o.UserId);
+                OrderUserText.Text = user?.Email ?? "-";
             }
         }
 
         private void UpdateOrderStatus(object sender, RoutedEventArgs e)
         {
-            var selected = OrdersGrid.SelectedItem as Orders;
-
-            if (selected == null)
-                return;
+            var o = OrdersGrid.SelectedItem as Orders;
+            if (o == null) return;
 
             using (var db = new OnlineStoreDbEntities1())
             {
-                var order = db.Orders.First(x => x.Id == selected.Id);
-
+                var order = db.Orders.First(x => x.Id == o.Id);
                 order.Status = ((ComboBoxItem)OrderStatusBox.SelectedItem).Content.ToString();
-
                 db.SaveChanges();
             }
 
             LoadData();
         }
+
+        // ================= HELPERS =================
+        private decimal ParseDecimal(string v)
+            => decimal.TryParse(v, out var r) ? r : 0;
+
+        private int ParseInt(string v)
+            => int.TryParse(v, out var r) ? r : 0;
     }
 }

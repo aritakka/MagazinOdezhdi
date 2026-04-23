@@ -1,14 +1,15 @@
 ﻿<Window x:Class="ClothingStoreNew.AdminWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Админ панель" Height="600" Width="1000">
+        Title="Админ панель" Height="650" Width="1100">
 
     <Grid>
         <TabControl>
 
-            <!-- PRODUCTS -->
+            <!-- ================= PRODUCTS ================= -->
             <TabItem Header="Товары">
                 <Grid Margin="10">
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
@@ -16,28 +17,56 @@
 
                     <DataGrid x:Name="ProductsGrid"
                               AutoGenerateColumns="True"
+                              SelectionChanged="ProductsGrid_SelectionChanged"
                               Grid.Column="0"
                               Margin="0,0,10,0"/>
 
                     <StackPanel Grid.Column="1">
 
-                        <TextBlock Text="Название товара"/>
-                        <TextBox x:Name="NameBox" Margin="0,5"/>
+                        <TextBlock Text="Название"/>
+                        <TextBox x:Name="NameBox"/>
 
                         <TextBlock Text="Цена"/>
-                        <TextBox x:Name="PriceBox" Margin="0,5"/>
+                        <TextBox x:Name="PriceBox"/>
 
-                        <Button Content="Добавить" Click="AddProduct" Margin="0,5"/>
-                        <Button Content="Обновить" Click="UpdateProduct" Margin="0,5"/>
-                        <Button Content="Удалить" Click="DeleteProduct" Margin="0,5"/>
+                        <TextBlock Text="Описание"/>
+                        <TextBox x:Name="DescriptionBox"/>
+
+                        <TextBlock Text="Категория"/>
+                        <ComboBox x:Name="CategoryBox"
+                                  DisplayMemberPath="Name"
+                                  Margin="0,5"/>
+
+                        <TextBlock Text="Бренд"/>
+                        <ComboBox x:Name="BrandBox"
+                                  DisplayMemberPath="Name"
+                                  Margin="0,5"/>
+
+                        <Button Content="Выбрать изображение"
+                                Click="SelectImage_Click"
+                                Margin="5"/>
+
+                        <TextBlock x:Name="ImagePathText"
+                                   Text="Файл не выбран"
+                                   TextWrapping="Wrap"
+                                   Margin="5"/>
+
+                        <TextBlock Text="Наличие"/>
+                        <TextBox x:Name="StockBox"/>
+
+                        <Button Content="Добавить" Click="AddProduct"/>
+                        <Button Content="Обновить" Click="UpdateProduct"/>
+                        <Button Content="Удалить" Click="DeleteProduct"/>
 
                     </StackPanel>
+
                 </Grid>
             </TabItem>
 
-            <!-- USERS -->
+            <!-- ================= USERS ================= -->
             <TabItem Header="Пользователи">
                 <Grid Margin="10">
+
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="*"/>
@@ -51,37 +80,31 @@
                     <StackPanel Grid.Column="1">
 
                         <TextBlock Text="Email"/>
-                        <TextBox x:Name="NewEmailBox" Margin="0,5"/>
+                        <TextBox x:Name="NewEmailBox"/>
 
                         <TextBlock Text="ФИО"/>
-                        <TextBox x:Name="NewNameBox" Margin="0,5"/>
+                        <TextBox x:Name="NewNameBox"/>
 
                         <TextBlock Text="Пароль"/>
-                        <TextBox x:Name="NewPasswordBox" Margin="0,5"/>
+                        <TextBox x:Name="NewPasswordBox"/>
 
-                        <Button Content="Добавить пользователя"
-                                Click="AddUser"
-                                Margin="0,5"/>
+                        <Button Content="Добавить" Click="AddUser"/>
 
-                        <TextBlock Text="Роль пользователя" Margin="10,10,0,5"/>
-
-                        <ComboBox x:Name="RoleBox" Margin="0,5">
+                        <TextBlock Text="Роль"/>
+                        <ComboBox x:Name="RoleBox">
                             <ComboBoxItem Content="User"/>
                             <ComboBoxItem Content="Admin"/>
                         </ComboBox>
 
                         <Button Content="Сменить роль" Click="ChangeRole"/>
-                        <Button Content="Удалить пользователя"
-        Click="DeleteUser"
-        Margin="0,5"
-        Background="Tomato"
-        Foreground="White"/>
+                        <Button Content="Удалить" Click="DeleteUser"/>
 
                     </StackPanel>
+
                 </Grid>
             </TabItem>
 
-            <!-- ORDERS -->
+            <!-- ================= ORDERS ================= -->
             <TabItem Header="Заказы">
                 <Grid Margin="10">
 
@@ -91,30 +114,24 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <!-- Заказы -->
                     <DataGrid x:Name="OrdersGrid"
                               AutoGenerateColumns="True"
-                              SelectionChanged="OrdersGrid_SelectionChanged"
-                              Grid.Column="0"
-                              Margin="0,0,10,0"/>
+                              SelectionChanged="OrdersGrid_SelectionChanged"/>
 
-                    <!-- Состав заказа -->
                     <DataGrid x:Name="OrderItemsGrid"
-                              AutoGenerateColumns="True"
                               Grid.Column="1"
-                              Margin="0,0,10,0"/>
+                              AutoGenerateColumns="True"/>
 
-                    <!-- Управление -->
                     <StackPanel Grid.Column="2">
 
                         <TextBlock Text="Пользователь"/>
-                        <TextBlock x:Name="OrderUserText" Margin="0,5"/>
+                        <TextBlock x:Name="OrderUserText"/>
 
-                        <TextBlock Text="Сумма заказа"/>
-                        <TextBlock x:Name="OrderTotalText" Margin="0,5"/>
+                        <TextBlock Text="Сумма"/>
+                        <TextBlock x:Name="OrderTotalText"/>
 
-                        <TextBlock Text="Статус заказа"/>
-                        <ComboBox x:Name="OrderStatusBox" Margin="0,5">
+                        <TextBlock Text="Статус"/>
+                        <ComboBox x:Name="OrderStatusBox">
                             <ComboBoxItem Content="Новый"/>
                             <ComboBoxItem Content="В обработке"/>
                             <ComboBoxItem Content="Отправлен"/>
@@ -122,9 +139,7 @@
                             <ComboBoxItem Content="Отменён"/>
                         </ComboBox>
 
-                        <Button Content="Обновить статус"
-                                Click="UpdateOrderStatus"
-                                Margin="0,5"/>
+                        <Button Content="Обновить" Click="UpdateOrderStatus"/>
 
                     </StackPanel>
 

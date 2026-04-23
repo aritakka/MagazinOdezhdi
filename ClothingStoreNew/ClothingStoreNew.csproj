@@ -94,6 +94,7 @@
     <Compile Include="Controls\AdminWindow.xaml.cs">
       <DependentUpon>AdminWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\ImagePathConverter.cs" />
     <Compile Include="C__EFMigrationsHistory.cs">
       <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
@@ -186,7 +187,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Conventers\" />
     <Folder Include="Data\" />
   </ItemGroup>
   <ItemGroup>
