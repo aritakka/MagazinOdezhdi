@@ -18,11 +18,12 @@ namespace ClothingStoreNew
             {
                 ProductsGrid.ItemsSource = db.Products.ToList();
                 UsersGrid.ItemsSource = db.Users.ToList();
-                OrdersGrid.ItemsSource = db.Orders.ToList(); // 👈 добавили
+                OrdersGrid.ItemsSource = db.Orders.ToList();
             }
         }
 
         // PRODUCTS
+
         private void AddProduct(object sender, RoutedEventArgs e)
         {
             using (var db = new OnlineStoreDbEntities1())
@@ -43,6 +44,8 @@ namespace ClothingStoreNew
         {
             var p = (Products)ProductsGrid.SelectedItem;
 
+            if (p == null) return;
+
             using (var db = new OnlineStoreDbEntities1())
             {
                 var prod = db.Products.First(x => x.Id == p.Id);
@@ -60,6 +63,8 @@ namespace ClothingStoreNew
         {
             var p = (Products)ProductsGrid.SelectedItem;
 
+            if (p == null) return;
+
             using (var db = new OnlineStoreDbEntities1())
             {
                 var prod = db.Products.First(x => x.Id == p.Id);
@@ -72,6 +77,7 @@ namespace ClothingStoreNew
         }
 
         // USERS
+
         private void AddUser(object sender, RoutedEventArgs e)
         {
             using (var db = new OnlineStoreDbEntities1())
@@ -102,6 +108,8 @@ namespace ClothingStoreNew
         {
             var u = (Users)UsersGrid.SelectedItem;
 
+            if (u == null) return;
+
             using (var db = new OnlineStoreDbEntities1())
             {
                 var user = db.Users.First(x => x.Id == u.Id);
@@ -114,7 +122,50 @@ namespace ClothingStoreNew
             LoadData();
         }
 
-        // 🆕 ORDERS
+        // ORDERS
+
+        private void OrdersGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var o = (Orders)OrdersGrid.SelectedItem;
+
+            if (o == null)
+                return;
+
+            using (var db = new OnlineStoreDbEntities1())
+            {
+                var items = db.OrderItems
+                    .Where(x => x.OrderId == o.Id)
+                    .Select(x => new
+                    {
+                        x.Id,
+                        Product = x.Products.Name,
+                        x.Quantity,
+                        x.Price,
+                        Total = x.Quantity * x.Price
+                    })
+                    .ToList();
+
+                OrderItemsGrid.ItemsSource = items;
+
+                // сумма
+                var total = items.Sum(x => x.Total);
+                OrderTotalText.Text = total.ToString("0.00");
+
+                // пользователь
+                var user = db.Users.FirstOrDefault(x => x.Id == o.UserId);
+                OrderUserText.Text = user != null ? user.Email : "-";
+
+                // статус в ComboBox
+                foreach (ComboBoxItem item in OrderStatusBox.Items)
+                {
+                    if (item.Content.ToString() == o.Status)
+                    {
+                        OrderStatusBox.SelectedItem = item;
+                        break;
+                    }
+                }
+            }
+        }
 
         private void UpdateOrderStatus(object sender, RoutedEventArgs e)
         {
