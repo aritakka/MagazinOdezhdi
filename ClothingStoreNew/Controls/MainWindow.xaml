@@ -70,6 +70,18 @@
                              TextChanged="Filter_Changed"
                              ToolTip="Макс цена"/>
 
+                    <!-- 🔥 SORT -->
+                    <ComboBox x:Name="SortComboBox"
+                              Width="150"
+                              Margin="5"
+                              SelectedIndex="0"
+                              SelectionChanged="Filter_Changed">
+                        <ComboBoxItem Content="Цена ↑"/>
+                        <ComboBoxItem Content="Цена ↓"/>
+                        <ComboBoxItem Content="Имя A-Z"/>
+                        <ComboBoxItem Content="Имя Z-A"/>
+                    </ComboBox>
+
                     <!-- 🔥 RESET -->
                     <Button Content="Сброс"
                             Width="100"

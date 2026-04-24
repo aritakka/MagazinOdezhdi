@@ -62,11 +62,28 @@ namespace ClothingStoreNew
                 (category == null || p.CategoryId == category.Id) &&
                 (min == 0 || p.Price >= min) &&
                 (max == 0 || p.Price <= max)
-            ).ToList();
+            );
+
+            // ================= SORT =================
+            switch (SortComboBox.SelectedIndex)
+            {
+                case 0:
+                    filtered = filtered.OrderBy(p => p.Price);
+                    break;
+                case 1:
+                    filtered = filtered.OrderByDescending(p => p.Price);
+                    break;
+                case 2:
+                    filtered = filtered.OrderBy(p => p.Name);
+                    break;
+                case 3:
+                    filtered = filtered.OrderByDescending(p => p.Name);
+                    break;
+            }
 
             Products.Clear();
 
-            foreach (var item in filtered)
+            foreach (var item in filtered.ToList())
                 Products.Add(item);
         }
 
@@ -77,6 +94,7 @@ namespace ClothingStoreNew
             MinPriceBox.Text = "";
             MaxPriceBox.Text = "";
             CategoryFilter.SelectedItem = null;
+            SortComboBox.SelectedIndex = 0;
 
             ApplyFilter();
         }
