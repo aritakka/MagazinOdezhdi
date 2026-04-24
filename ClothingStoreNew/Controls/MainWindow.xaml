@@ -10,23 +10,56 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <!-- TOP -->
-        <StackPanel Orientation="Horizontal" Margin="10">
+        <!-- 🔝 ВЕРХ + ФИЛЬТРЫ -->
+        <StackPanel Margin="10">
 
-            <Button Content="Корзина"
-                    Width="120"
-                    Margin="5"
-                    Click="Cart_Click"/>
+            <!-- КНОПКИ -->
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Корзина"
+                        Width="120"
+                        Margin="5"
+                        Click="Cart_Click"/>
 
-            <Button Content="Админ панель"
-                    Width="150"
-                    Margin="5"
-                    Visibility="{Binding AdminVisibility}"
-                    Click="Admin_Click"/>
+                <Button Content="Админ панель"
+                        Width="150"
+                        Margin="5"
+                        Visibility="{Binding AdminVisibility}"
+                        Click="Admin_Click"/>
+            </StackPanel>
+
+            <!-- 🔍 ФИЛЬТРЫ -->
+            <StackPanel Orientation="Horizontal" Margin="5">
+
+                <TextBox x:Name="SearchBox"
+                         Width="200"
+                         Margin="5"
+                         VerticalAlignment="Center"
+                         TextChanged="Filter_Changed"
+                         ToolTip="Поиск по названию"/>
+
+                <ComboBox x:Name="CategoryFilter"
+                          Width="150"
+                          Margin="5"
+                          DisplayMemberPath="Name"
+                          SelectionChanged="Filter_Changed"/>
+
+                <TextBox x:Name="MinPriceBox"
+                         Width="80"
+                         Margin="5"
+                         TextChanged="Filter_Changed"
+                         ToolTip="Мин цена"/>
+
+                <TextBox x:Name="MaxPriceBox"
+                         Width="80"
+                         Margin="5"
+                         TextChanged="Filter_Changed"
+                         ToolTip="Макс цена"/>
+
+            </StackPanel>
 
         </StackPanel>
 
-        <!-- PRODUCTS -->
+        <!-- 🛍 ТОВАРЫ -->
         <ScrollViewer Grid.Row="1">
 
             <ItemsControl ItemsSource="{Binding Products}">
@@ -48,7 +81,6 @@
 
                             <StackPanel>
 
-                                <!-- IMAGE (ВАЖНО: CONVERTER) -->
                                 <Image Width="160"
                                        Height="160"
                                        Stretch="UniformToFill"
