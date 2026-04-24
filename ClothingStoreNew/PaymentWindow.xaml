@@ -1,0 +1,27 @@
+﻿<Window x:Class="ClothingStoreNew.PaymentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Оплата"
+        Height="400"
+        Width="300"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Background="White">
+
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+            <TextBlock Text="Отсканируйте QR для оплаты"
+                       Margin="10"
+                       FontSize="16"
+                       HorizontalAlignment="Center"/>
+
+            <Image x:Name="QrImage"
+                   Width="220"
+                   Height="220"
+                   Margin="10"/>
+
+        </StackPanel>
+
+    </Grid>
+</Window>

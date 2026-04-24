@@ -48,9 +48,18 @@ namespace ClothingStoreNew
             LoadCart();
         }
 
+        // =================🔥 UPDATED =================
         private void Checkout_Click(object sender, RoutedEventArgs e)
         {
             if (!CartManager.Items.Any())
+                return;
+
+            // ❗ вместо сразу оформления — открываем оплату
+            var payment = new PaymentWindow();
+            bool? result = payment.ShowDialog();
+
+            // если пользователь закрыл окно оплаты — ничего не делаем
+            if (result != true)
                 return;
 
             using (var db = new OnlineStoreDbEntities1())
@@ -58,9 +67,7 @@ namespace ClothingStoreNew
                 var order = new Orders
                 {
                     UserId = App.CurrentUser.Id,
-                    Status = "Новый",
-
-                    // ✅ правильное поле из EDMX
+                    Status = "Оплачен",
                     CreatedAt = DateTime.Now
                 };
 
@@ -85,7 +92,7 @@ namespace ClothingStoreNew
 
             CartManager.Items.Clear();
 
-            MessageBox.Show("Заказ оформлен!");
+            MessageBox.Show("Оплата прошла успешно! Заказ оформлен.");
 
             Close();
         }
