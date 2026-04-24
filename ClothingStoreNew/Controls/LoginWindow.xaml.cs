@@ -14,6 +14,20 @@ namespace ClothingStoreNew.Controls
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
+            // ================= VALIDATION =================
+            if (string.IsNullOrWhiteSpace(EmailBox.Text))
+            {
+                MessageBox.Show("Введите email");
+                return;
+            }
+
+            if (string.IsNullOrWhiteSpace(PasswordBox.Password))
+            {
+                MessageBox.Show("Введите пароль");
+                return;
+            }
+
+            // ================= LOGIN =================
             var user = _auth.Login(EmailBox.Text, PasswordBox.Password);
 
             if (user == null)

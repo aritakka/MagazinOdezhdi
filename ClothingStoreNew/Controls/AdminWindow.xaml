@@ -24,7 +24,6 @@
                               Margin="0,0,10,0"
                               AutoGenerateColumns="True"
                               Background="White"
-                              BorderThickness="0"
                               SelectionChanged="ProductsGrid_SelectionChanged"/>
 
                     <Border Grid.Column="1"
@@ -59,8 +58,7 @@
 
                             <TextBlock x:Name="ImagePathText"
                                        Text="Файл не выбран"
-                                       Foreground="Gray"
-                                       TextWrapping="Wrap"/>
+                                       Foreground="Gray"/>
 
                             <TextBlock Text="Наличие"/>
                             <TextBox x:Name="StockBox"/>
@@ -98,15 +96,12 @@
 
                     <DataGrid x:Name="UsersGrid"
                               Grid.Column="0"
-                              Margin="0,0,10,0"
                               AutoGenerateColumns="True"
-                              Background="White"
-                              BorderThickness="0"/>
+                              Background="White"/>
 
                     <Border Grid.Column="1"
                             Background="White"
-                            Padding="15"
-                            CornerRadius="10">
+                            Padding="15">
 
                         <StackPanel>
 
@@ -123,7 +118,6 @@
                                     Click="AddUser"/>
 
                             <TextBlock Text="Роль"/>
-
                             <ComboBox x:Name="RoleBox">
                                 <ComboBoxItem Content="User"/>
                                 <ComboBoxItem Content="Admin"/>
@@ -155,38 +149,26 @@
 
                     <DataGrid x:Name="OrdersGrid"
                               Grid.Column="0"
-                              Margin="0,0,10,0"
                               AutoGenerateColumns="True"
-                              Background="White"
                               SelectionChanged="OrdersGrid_SelectionChanged"/>
 
                     <DataGrid x:Name="OrderItemsGrid"
                               Grid.Column="1"
-                              Margin="0,0,10,0"
-                              AutoGenerateColumns="True"
-                              Background="White"/>
+                              AutoGenerateColumns="True"/>
 
                     <Border Grid.Column="2"
                             Background="White"
-                            Padding="15"
-                            CornerRadius="10">
+                            Padding="15">
 
                         <StackPanel>
 
-                            <TextBlock Text="Пользователь"
-                                       FontWeight="Bold"/>
+                            <TextBlock Text="Пользователь"/>
+                            <TextBlock x:Name="OrderUserText"/>
 
-                            <TextBlock x:Name="OrderUserText"
-                                       Margin="0,5"/>
+                            <TextBlock Text="Сумма"/>
+                            <TextBlock x:Name="OrderTotalText"/>
 
-                            <TextBlock Text="Сумма"
-                                       FontWeight="Bold"/>
-
-                            <TextBlock x:Name="OrderTotalText"
-                                       Margin="0,5"/>
-
-                            <TextBlock Text="Статус"
-                                       FontWeight="Bold"/>
+                            <TextBlock Text="Статус"/>
 
                             <ComboBox x:Name="OrderStatusBox">
                                 <ComboBoxItem Content="Новый"/>

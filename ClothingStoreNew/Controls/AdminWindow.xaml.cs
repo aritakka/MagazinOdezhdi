@@ -3,7 +3,6 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.IO;
 
 namespace ClothingStoreNew
 {
@@ -36,9 +35,7 @@ namespace ClothingStoreNew
         {
             var dlg = new OpenFileDialog
             {
-                Title = "Выберите изображение",
-                Filter = "Images|*.jpg;*.jpeg;*.png",
-                Multiselect = false
+                Filter = "Images|*.jpg;*.png;*.jpeg"
             };
 
             if (dlg.ShowDialog() == true)
@@ -53,24 +50,15 @@ namespace ClothingStoreNew
         {
             using (var db = new OnlineStoreDbEntities1())
             {
-                var cat = CategoryBox.SelectedItem as Categories;
-                var brand = BrandBox.SelectedItem as Brands;
-
-                if (cat == null || brand == null)
-                {
-                    MessageBox.Show("Выберите категорию и бренд");
-                    return;
-                }
-
                 db.Products.Add(new Products
                 {
                     Name = NameBox.Text,
-                    Price = ParseDecimal(PriceBox.Text),
+                    Price = decimal.Parse(PriceBox.Text),
                     Description = DescriptionBox.Text,
-                    Stock = ParseInt(StockBox.Text),
+                    Stock = int.Parse(StockBox.Text),
                     ImagePath = selectedImagePath,
-                    CategoryId = cat.Id,
-                    BrandId = brand.Id
+                    CategoryId = (CategoryBox.SelectedItem as Categories)?.Id ?? 0,
+                    BrandId = (BrandBox.SelectedItem as Brands)?.Id ?? 0
                 });
 
                 db.SaveChanges();
@@ -88,17 +76,11 @@ namespace ClothingStoreNew
             {
                 var p = db.Products.First(x => x.Id == selected.Id);
 
-                var cat = CategoryBox.SelectedItem as Categories;
-                var brand = BrandBox.SelectedItem as Brands;
-
                 p.Name = NameBox.Text;
-                p.Price = ParseDecimal(PriceBox.Text);
+                p.Price = decimal.Parse(PriceBox.Text);
                 p.Description = DescriptionBox.Text;
-                p.Stock = ParseInt(StockBox.Text);
+                p.Stock = int.Parse(StockBox.Text);
                 p.ImagePath = selectedImagePath;
-
-                if (cat != null) p.CategoryId = cat.Id;
-                if (brand != null) p.BrandId = brand.Id;
 
                 db.SaveChanges();
             }
@@ -113,8 +95,7 @@ namespace ClothingStoreNew
 
             using (var db = new OnlineStoreDbEntities1())
             {
-                var p = db.Products.First(x => x.Id == selected.Id);
-                db.Products.Remove(p);
+                db.Products.Remove(db.Products.First(x => x.Id == selected.Id));
                 db.SaveChanges();
             }
 
@@ -130,15 +111,6 @@ namespace ClothingStoreNew
             PriceBox.Text = p.Price.ToString();
             DescriptionBox.Text = p.Description;
             StockBox.Text = p.Stock.ToString();
-
-            selectedImagePath = p.ImagePath;
-            ImagePathText.Text = p.ImagePath ?? "нет файла";
-
-            using (var db = new OnlineStoreDbEntities1())
-            {
-                CategoryBox.SelectedItem = db.Categories.FirstOrDefault(x => x.Id == p.CategoryId);
-                BrandBox.SelectedItem = db.Brands.FirstOrDefault(x => x.Id == p.BrandId);
-            }
         }
 
         // ================= USERS =================
@@ -182,8 +154,7 @@ namespace ClothingStoreNew
 
             using (var db = new OnlineStoreDbEntities1())
             {
-                var user = db.Users.First(x => x.Id == u.Id);
-                db.Users.Remove(user);
+                db.Users.Remove(db.Users.First(x => x.Id == u.Id));
                 db.SaveChanges();
             }
 
@@ -202,17 +173,12 @@ namespace ClothingStoreNew
                     .Where(x => x.OrderId == o.Id)
                     .Select(x => new
                     {
-                        Product = x.Products.Name,
+                        x.Products.Name,
                         x.Quantity,
-                        x.Price,
-                        Total = x.Quantity * x.Price
+                        x.Price
                     }).ToList();
 
                 OrderItemsGrid.ItemsSource = items;
-                OrderTotalText.Text = items.Sum(x => x.Total).ToString("0.00");
-
-                var user = db.Users.FirstOrDefault(x => x.Id == o.UserId);
-                OrderUserText.Text = user?.Email ?? "-";
             }
         }
 
@@ -230,12 +196,5 @@ namespace ClothingStoreNew
 
             LoadData();
         }
-
-        // ================= HELPERS =================
-        private decimal ParseDecimal(string v)
-            => decimal.TryParse(v, out var r) ? r : 0;
-
-        private int ParseInt(string v)
-            => int.TryParse(v, out var r) ? r : 0;
     }
 }
