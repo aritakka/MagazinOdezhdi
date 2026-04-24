@@ -1,7 +1,10 @@
 ﻿<Window x:Class="ClothingStoreNew.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Магазин" Height="650" Width="1100">
+        Title="Магазин"
+        Height="650"
+        Width="1100"
+        Background="#F5F7FB">
 
     <Grid>
 
@@ -10,59 +13,80 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <!-- 🔝 ВЕРХ + ФИЛЬТРЫ -->
-        <StackPanel Margin="10">
+        <!-- ================= TOP PANEL ================= -->
+        <Border Background="White"
+                Margin="10"
+                Padding="12"
+                CornerRadius="12">
 
-            <!-- КНОПКИ -->
-            <StackPanel Orientation="Horizontal">
-                <Button Content="Корзина"
-                        Width="120"
-                        Margin="5"
-                        Click="Cart_Click"/>
+            <StackPanel>
 
-                <Button Content="Админ панель"
-                        Width="150"
-                        Margin="5"
-                        Visibility="{Binding AdminVisibility}"
-                        Click="Admin_Click"/>
+                <!-- BUTTONS -->
+                <StackPanel Orientation="Horizontal">
+
+                    <Button Content="Корзина"
+                            Width="120"
+                            Margin="5"
+                            Click="Cart_Click"/>
+
+                    <Button Content="Админ панель"
+                            Width="150"
+                            Margin="5"
+                            Visibility="{Binding AdminVisibility}"
+                            Click="Admin_Click"/>
+
+                    <Button Content="➕ Добавить товар"
+                            Width="160"
+                            Margin="5"
+                            Visibility="{Binding AdminVisibility}"
+                            Click="AddProduct_Click"/>
+
+                </StackPanel>
+
+                <!-- FILTERS -->
+                <StackPanel Orientation="Horizontal" Margin="5">
+
+                    <TextBox x:Name="SearchBox"
+                             Width="200"
+                             Margin="5"
+                             TextChanged="Filter_Changed"
+                             ToolTip="Поиск по названию"/>
+
+                    <ComboBox x:Name="CategoryFilter"
+                              Width="150"
+                              Margin="5"
+                              DisplayMemberPath="Name"
+                              SelectionChanged="Filter_Changed"/>
+
+                    <TextBox x:Name="MinPriceBox"
+                             Width="80"
+                             Margin="5"
+                             TextChanged="Filter_Changed"
+                             ToolTip="Мин цена"/>
+
+                    <TextBox x:Name="MaxPriceBox"
+                             Width="80"
+                             Margin="5"
+                             TextChanged="Filter_Changed"
+                             ToolTip="Макс цена"/>
+
+                    <!-- 🔥 RESET -->
+                    <Button Content="Сброс"
+                            Width="100"
+                            Margin="5"
+                            Click="ResetFilters_Click"/>
+
+                </StackPanel>
+
             </StackPanel>
 
-            <!-- 🔍 ФИЛЬТРЫ -->
-            <StackPanel Orientation="Horizontal" Margin="5">
+        </Border>
 
-                <TextBox x:Name="SearchBox"
-                         Width="200"
-                         Margin="5"
-                         VerticalAlignment="Center"
-                         TextChanged="Filter_Changed"
-                         ToolTip="Поиск по названию"/>
-
-                <ComboBox x:Name="CategoryFilter"
-                          Width="150"
-                          Margin="5"
-                          DisplayMemberPath="Name"
-                          SelectionChanged="Filter_Changed"/>
-
-                <TextBox x:Name="MinPriceBox"
-                         Width="80"
-                         Margin="5"
-                         TextChanged="Filter_Changed"
-                         ToolTip="Мин цена"/>
-
-                <TextBox x:Name="MaxPriceBox"
-                         Width="80"
-                         Margin="5"
-                         TextChanged="Filter_Changed"
-                         ToolTip="Макс цена"/>
-
-            </StackPanel>
-
-        </StackPanel>
-
-        <!-- 🛍 ТОВАРЫ -->
+        <!-- ================= PRODUCTS ================= -->
         <ScrollViewer Grid.Row="1">
 
             <ItemsControl ItemsSource="{Binding Products}">
+
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel/>
@@ -72,32 +96,37 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
 
-                        <Border Width="200"
+                        <Border Width="210"
                                 Margin="10"
                                 Padding="10"
-                                BorderBrush="#DDD"
-                                BorderThickness="1"
-                                CornerRadius="8">
+                                Background="White"
+                                CornerRadius="12">
 
                             <StackPanel>
 
-                                <Image Width="160"
-                                       Height="160"
+                                <Image Width="180"
+                                       Height="180"
                                        Stretch="UniformToFill"
                                        Source="{Binding ImagePath}"/>
 
                                 <TextBlock Text="{Binding Name}"
                                            FontWeight="Bold"
-                                           Margin="0,8,0,0"
-                                           TextWrapping="Wrap"/>
+                                           Margin="0,5"/>
 
                                 <TextBlock Text="{Binding Price, StringFormat={}{0} ₽}"
                                            Foreground="Green"
-                                           Margin="0,5"/>
+                                           FontWeight="Bold"/>
 
                                 <Button Content="В корзину"
                                         Tag="{Binding}"
                                         Click="AddToCart_Click"/>
+
+                                <!-- 🔥 ADMIN EDIT -->
+                                <Button Content="Изменить товар"
+                                        Tag="{Binding}"
+                                        Click="EditProduct_Click"
+                                        Visibility="{Binding DataContext.AdminVisibility,
+                                            RelativeSource={RelativeSource AncestorType=Window}}"/>
 
                             </StackPanel>
 

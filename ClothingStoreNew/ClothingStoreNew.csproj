@@ -104,6 +104,9 @@
     <Compile Include="Orders.cs">
       <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
+    <Compile Include="ProductEditWindow.xaml.cs">
+      <DependentUpon>ProductEditWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Products.cs">
       <DependentUpon>ClothingStoreModel1.tt</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\RegisterWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ProductEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
