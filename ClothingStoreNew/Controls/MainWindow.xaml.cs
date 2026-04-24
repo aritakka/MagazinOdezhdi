@@ -32,13 +32,16 @@ namespace ClothingStoreNew
         {
             using (var db = new OnlineStoreDbEntities1())
             {
-                AllProducts = db.Products.ToList();
+                // ВАЖНО: всегда берём свежие данные
+                AllProducts = db.Products.AsNoTracking().ToList();
 
                 Products.Clear();
                 foreach (var p in AllProducts)
                     Products.Add(p);
 
-                CategoryFilter.ItemsSource = db.Categories.ToList();
+                // категории всегда перечитываем заново
+                CategoryFilter.ItemsSource = null;
+                CategoryFilter.ItemsSource = db.Categories.AsNoTracking().ToList();
             }
         }
 
@@ -87,7 +90,7 @@ namespace ClothingStoreNew
                 Products.Add(item);
         }
 
-        // ================= RESET FILTERS =================
+        // ================= RESET =================
         private void ResetFilters_Click(object sender, RoutedEventArgs e)
         {
             SearchBox.Text = "";
@@ -124,7 +127,7 @@ namespace ClothingStoreNew
             new AdminWindow().Show();
         }
 
-        // ================= EDIT PRODUCT =================
+        // ================= EDIT =================
         private void EditProduct_Click(object sender, RoutedEventArgs e)
         {
             if (!App.IsAdmin)
@@ -140,10 +143,11 @@ namespace ClothingStoreNew
             var win = new ProductEditWindow(product);
             win.ShowDialog();
 
-            LoadProducts();
+            // 🔥 КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ — полностью обновляем данные
+            ReloadAllData();
         }
 
-        // ================= ADD PRODUCT =================
+        // ================= ADD =================
         private void AddProduct_Click(object sender, RoutedEventArgs e)
         {
             if (!App.IsAdmin)
@@ -155,7 +159,25 @@ namespace ClothingStoreNew
             var win = new ProductEditWindow(null);
             win.ShowDialog();
 
-            LoadProducts();
+            ReloadAllData();
+        }
+
+        // ================= 🔥 NEW CORE METHOD =================
+        private void ReloadAllData()
+        {
+            using (var db = new OnlineStoreDbEntities1())
+            {
+                AllProducts = db.Products.AsNoTracking().ToList();
+
+                Products.Clear();
+                foreach (var p in AllProducts)
+                    Products.Add(p);
+
+                CategoryFilter.ItemsSource = null;
+                CategoryFilter.ItemsSource = db.Categories.AsNoTracking().ToList();
+            }
+
+            ApplyFilter();
         }
     }
 }
